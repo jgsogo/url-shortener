@@ -15,18 +15,19 @@ from urlweb.shortener.baseconv import base62
 from urlweb.shortener.models import Link, LinkSubmitForm
 
 def follow(request, base62_id):
-    """ 
+    """
     View which gets the link for the given base62_id value
     and redirects to it.
     """
     key = base62.to_decimal(base62_id)
     link = get_object_or_404(Link, pk = key)
-    link.usage_count += 1
-    link.save()
+    if settings.SHORTENER_LOG_HITS:
+        link.usage_count += 1
+        link.save()
     return HttpResponsePermanentRedirect(link.url)
 
 def default_values(request, link_form=None):
-    """ 
+    """
     Return a new object with the default values that are typically
     returned in a request.
     """
@@ -35,8 +36,8 @@ def default_values(request, link_form=None):
     allowed_to_submit = is_allowed_to_submit(request)
     return { 'show_bookmarklet': allowed_to_submit,
              'show_url_form': allowed_to_submit,
-             'site_name': settings.SITE_NAME,
-             'site_base_url': settings.SITE_BASE_URL,
+             'site_name': settings.SHORTENER_SITE_NAME,
+             'site_base_url': settings.SHORTENER_SITE_BASE_URL,
              'link_form': link_form,
              }
 
@@ -105,4 +106,4 @@ def is_allowed_to_submit(request):
     """
     Return true if user is allowed to submit URLs
     """
-    return not settings.REQUIRE_LOGIN or request.user.is_authenticated()
+    return not settings.SHORTENER_REQUIRE_LOGIN or request.user.is_authenticated()

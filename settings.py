@@ -73,13 +73,13 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#    'django.middleware.transaction.TransactionMiddleware',    
+#    'django.middleware.transaction.TransactionMiddleware',
 )
 
 ROOT_URLCONF = 'urlweb.urls'
 
 TEMPLATE_DIRS = (
-    os.path.join(PROJECT_PATH, 'templates')    
+    os.path.join(PROJECT_PATH, 'templates')
 )
 
 INSTALLED_APPS = (
@@ -96,8 +96,9 @@ LOGIN_REDIRECT_URL = '/'
 
 #TEMPLATE_CONTEXT_PROCESSORS += (
 #    'django.core.context_processors.request',
-#    ) 
+#    )
 
-SITE_NAME = 'localhost:8000'
-SITE_BASE_URL = 'http://' + SITE_NAME + '/'
-REQUIRE_LOGIN = True
+SHORTENER_SITE_NAME = 'localhost:8000'
+SHORTENER_SITE_BASE_URL = 'http://' + SHORTENER_SITE_NAME + '/'
+SHORTENER_REQUIRE_LOGIN = True
+SHORTENER_LOG_HITS = True

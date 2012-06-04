@@ -5,7 +5,7 @@ from django.conf import settings
 #from django.contrib.auth.models import User
 from django import forms
 
-from urlweb.shortener.baseconv import base62
+from shortener.baseconv import base62
 
 class Link(models.Model):
     """
@@ -13,7 +13,7 @@ class Link(models.Model):
 
     # Initialize by deleting all Link objects
     >>> Link.objects.all().delete()
-    
+
     # Create some Link objects
     >>> link1 = Link.objects.create(url="http://www.google.com/")
     >>> link2 = Link.objects.create(url="http://www.nileshk.com/")
@@ -23,7 +23,7 @@ class Link(models.Model):
     'B'
     >>> link2.to_base62()
     'C'
-    
+
     # Set SITE_BASE_URL to something specific
     >>> settings.SITE_BASE_URL = 'http://uu4.us/'
 
@@ -41,7 +41,7 @@ class Link(models.Model):
     1
 
     """
-    url = models.URLField(verify_exists=True, unique=True)
+    url = models.URLField(unique=True)
     date_submitted = models.DateTimeField(auto_now_add=True)
     usage_count = models.IntegerField(default=0)
 
@@ -49,12 +49,10 @@ class Link(models.Model):
         return base62.from_decimal(self.id)
 
     def short_url(self):
-        return settings.SITE_BASE_URL + self.to_base62()
-    
+        return settings.SHORTENER_SITE_BASE_URL + self.to_base62()
+
     def __unicode__(self):
         return self.to_base62() + ' : ' + self.url
 
 class LinkSubmitForm(forms.Form):
-    u = forms.URLField(verify_exists=True,
-                       label='URL to be shortened:',
-                       )
+    u = forms.URLField(label='URL to be shortened:')
