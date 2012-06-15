@@ -45,6 +45,13 @@ class Link(models.Model):
     date_submitted = models.DateTimeField(auto_now_add=True)
     usage_count = models.IntegerField(default=0)
 
+    def save(self, *args, **kwargs):
+        if not self.id:
+            # Check url: we don't want cyclic relationships
+            if settings.SHORTENER_SITE_NAME in self.url:
+                raise AttributeError(u'Are you kidding? This url seems to be already shortened')
+        super(Link, self).save(*args, **kwargs)
+
     def to_base62(self):
         return base62.from_decimal(self.id)
 
