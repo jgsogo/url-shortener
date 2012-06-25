@@ -11,8 +11,8 @@ from django.views.decorators.http import require_POST
 from django.db import transaction
 from django.conf import settings
 
-from urlweb.shortener.baseconv import base62
-from urlweb.shortener.models import Link, LinkSubmitForm
+from shortener.baseconv import base62
+from shortener.models import Link, LinkSubmitForm
 
 def follow(request, base62_id):
     """
